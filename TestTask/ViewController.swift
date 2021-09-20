@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet var takePicture: UIButton!
     @IBOutlet var textFieldForLevelBright: UITextField!
     
+    // MARK: - Private properties
     private var takePhoto: Bool = false
     private var levelBright: Double = 40
     private let avSession = AVCaptureSession()
@@ -22,7 +23,7 @@ class ViewController: UIViewController {
     private var previewLayer: AVCaptureVideoPreviewLayer!
     private let videoOutputQueue = DispatchQueue(label: "com.testVideoQ")
     
-    // MARK: - Override Methods
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         getCamera()
@@ -41,6 +42,7 @@ class ViewController: UIViewController {
         avSession.stopRunning()
     }
     
+    // MARK: - IBActions
     @IBAction func takePicture(_ sender: Any) {
         takePhoto = true
     }
@@ -93,6 +95,13 @@ class ViewController: UIViewController {
         avSession.startRunning()
     }
     
+    private func savePhoto(image: UIImage) {
+        if takePhoto {
+            takePhoto = false
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        }
+    }
+    
     private func getImageFromSampleBuffer(buffer: CMSampleBuffer) -> UIImage? {
         
         if let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) {
@@ -118,48 +127,18 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let image = self.getImageFromSampleBuffer(buffer: sampleBuffer)
         if let image = image {
             DispatchQueue.main.async {
-                self.labelForBright.text = (image.brightness > self.levelBright ? "" : "💡")
+                self.labelForBright.text = (image.brightness > self.levelBright ? "" : "🔆")
             }
+            savePhoto(image: image)
             print(image.brightness)
-            if takePhoto {
-                takePhoto = false
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-            }
         }
-    }
-}
-
-// MARK: - UIImage
-
-extension CGImage {
-    var brightness: Double {
-        let imageData = self.dataProvider?.data
-        let ptr = CFDataGetBytePtr(imageData)
-        var x = 0
-        var result: Double = 0
-        for _ in 0..<self.height {
-            for _ in 0..<self.width {
-                let r = ptr![0]
-                let g = ptr![1]
-                let b = ptr![2]
-                result += (0.299 * Double(r) + 0.587 * Double(g) + 0.114 * Double(b))
-                x += 1
-            }
-        }
-        let bright = result / Double(x)
-        return bright
-    }
-}
-
-extension UIImage {
-    var brightness: Double {
-        return (self.cgImage?.brightness)!
     }
 }
 
 // MARK: - UITextFieldDelegate
 
 extension ViewController: UITextFieldDelegate {
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
