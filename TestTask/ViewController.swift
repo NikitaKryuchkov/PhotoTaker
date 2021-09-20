@@ -44,9 +44,9 @@ class ViewController: UIViewController {
     @IBAction func takePicture(_ sender: Any) {
         takePhoto = true
     }
-
+    
     // MARK: - Private Properties
-    private func getCamera(){
+    private func getCamera() {
         camera = AVCaptureDevice.DiscoverySession(
             deviceTypes: [
                 .builtInWideAngleCamera,
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
     
     private func startCamera() {
         AVCaptureDevice.requestAccess(for: .video) { _ in}
-
+        
         addCameraInput(to: avSession)
         attachPreviewLayer()
         addVideoOutput()
@@ -94,13 +94,13 @@ class ViewController: UIViewController {
     }
     
     private func getImageFromSampleBuffer(buffer: CMSampleBuffer) -> UIImage? {
-
+        
         if let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) {
             let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
             let context = CIContext()
-
+            
             let imageRect = CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))
-
+            
             if let image = context.createCGImage(ciImage, from: imageRect) {
                 return UIImage(cgImage: image, scale: UIScreen.main.scale, orientation: .right)
             }
@@ -133,31 +133,27 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 extension CGImage {
     var brightness: Double {
-        get {
-            let imageData = self.dataProvider?.data
-            let ptr = CFDataGetBytePtr(imageData)
-            var x = 0
-            var result: Double = 0
-            for _ in 0..<self.height {
-                for _ in 0..<self.width {
-                    let r = ptr![0]
-                    let g = ptr![1]
-                    let b = ptr![2]
-                    result += (0.299 * Double(r) + 0.587 * Double(g) + 0.114 * Double(b))
-                    x += 1
-                }
+        let imageData = self.dataProvider?.data
+        let ptr = CFDataGetBytePtr(imageData)
+        var x = 0
+        var result: Double = 0
+        for _ in 0..<self.height {
+            for _ in 0..<self.width {
+                let r = ptr![0]
+                let g = ptr![1]
+                let b = ptr![2]
+                result += (0.299 * Double(r) + 0.587 * Double(g) + 0.114 * Double(b))
+                x += 1
             }
-            let bright = result / Double (x)
-            return bright
         }
+        let bright = result / Double(x)
+        return bright
     }
 }
 
 extension UIImage {
     var brightness: Double {
-        get {
-            return (self.cgImage?.brightness)!
-        }
+        return (self.cgImage?.brightness)!
     }
 }
 
@@ -168,23 +164,23 @@ extension ViewController: UITextFieldDelegate {
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
     }
-
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
-       let keyboardToolbar = UIToolbar()
+        let keyboardToolbar = UIToolbar()
         textField.inputAccessoryView = keyboardToolbar
         keyboardToolbar.sizeToFit()
-
+        
         let doneButton = UIBarButtonItem(
-            title:"Done",
+            title: "Done",
             style: .done,
             target: self,
             action: #selector(textFieldShouldReturn(_:))
         )
-
+        
         let flexBarButton = UIBarButtonItem(
             barButtonSystemItem: .flexibleSpace,
             target: nil,
@@ -192,13 +188,11 @@ extension ViewController: UITextFieldDelegate {
         )
         keyboardToolbar.items = [flexBarButton, doneButton]
     }
-
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
-
+        
         if let text = textField.text {
             levelBright = Double(text) ?? 40
         }
     }
 }
-
-
