@@ -11,6 +11,7 @@
 		FA612D2826F88D7800AA90AE /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA612D2726F88D7800AA90AE /* R.generated.swift */; };
 		FA612D2A26F8907300AA90AE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = FA612D2926F8907300AA90AE /* .gitignore */; };
 		FA612D2C26F8B5A300AA90AE /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA612D2B26F8B5A300AA90AE /* UIExtensions.swift */; };
+		FA612D2E26F8F05700AA90AE /* BlurViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA612D2D26F8F05700AA90AE /* BlurViewController.swift */; };
 		FA86BF6326F538890040BEAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86BF6226F538890040BEAD /* AppDelegate.swift */; };
 		FA86BF6526F538890040BEAD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86BF6426F538890040BEAD /* SceneDelegate.swift */; };
 		FA86BF6726F538890040BEAD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86BF6626F538890040BEAD /* ViewController.swift */; };
@@ -26,6 +27,7 @@
 		FA612D2726F88D7800AA90AE /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		FA612D2926F8907300AA90AE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		FA612D2B26F8B5A300AA90AE /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		FA612D2D26F8F05700AA90AE /* BlurViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurViewController.swift; sourceTree = "<group>"; };
 		FA86BF5F26F538890040BEAD /* TestTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA86BF6226F538890040BEAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA86BF6426F538890040BEAD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,9 +96,11 @@
 		FA86BF6126F538890040BEAD /* TestTask */ = {
 			isa = PBXGroup;
 			children = (
+				FAEC582D2701AF1D00B246B1 /* image */,
 				FA86BF6226F538890040BEAD /* AppDelegate.swift */,
 				FA86BF6426F538890040BEAD /* SceneDelegate.swift */,
 				FA86BF6626F538890040BEAD /* ViewController.swift */,
+				FA612D2D26F8F05700AA90AE /* BlurViewController.swift */,
 				FA612D2B26F8B5A300AA90AE /* UIExtensions.swift */,
 				FA86BF6826F538890040BEAD /* Main.storyboard */,
 				FA86BF6B26F5388A0040BEAD /* Assets.xcassets */,
@@ -106,6 +110,13 @@
 				FA86BF7026F5388A0040BEAD /* Info.plist */,
 			);
 			path = TestTask;
+			sourceTree = "<group>";
+		};
+		FAEC582D2701AF1D00B246B1 /* image */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = image;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA612D2E26F8F05700AA90AE /* BlurViewController.swift in Sources */,
 				FA86BF6726F538890040BEAD /* ViewController.swift in Sources */,
 				FA86BF6326F538890040BEAD /* AppDelegate.swift in Sources */,
 				FA86BF6526F538890040BEAD /* SceneDelegate.swift in Sources */,
@@ -349,6 +361,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -413,6 +426,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X56KS4SF62;
 				INFOPLIST_FILE = TestTask/Info.plist;
@@ -422,8 +436,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nikita-Alekseev.TestTask";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Debug;
 		};
@@ -433,6 +449,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X56KS4SF62;
 				INFOPLIST_FILE = TestTask/Info.plist;
@@ -442,8 +459,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nikita-Alekseev.TestTask";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};

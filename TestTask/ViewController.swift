@@ -10,23 +10,32 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let blurVC = BlurViewController()
+    
     // MARK: - IB Outlets
     @IBOutlet var labelForBright: UILabel!
     @IBOutlet var takePicture: UIButton!
     @IBOutlet var textFieldForLevelBright: UITextField!
+    @IBOutlet var ImgView: UIImageView!
+    @IBOutlet var takePhotoOnRight: UIButton!
+    @IBOutlet var takePhotoOnDown: UIButton!
+    
     
     // MARK: - Private properties
     private var takePhoto: Bool = false
     private var levelBright: Double = 40
-    private let avSession = AVCaptureSession()
+    
+    private let avSession = AVCaptureSession() //vk
     private var camera: AVCaptureDevice?
-    private var previewLayer: AVCaptureVideoPreviewLayer!
+    private var previewLayer: AVCaptureVideoPreviewLayer!//vk
     private let videoOutputQueue = DispatchQueue(label: "com.testVideoQ")
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         getCamera()
+        ImgView.alpha = 0.8
+        ImgView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -35,6 +44,9 @@ class ViewController: UIViewController {
         view.addSubview(labelForBright)
         view.addSubview(takePicture)
         view.addSubview(textFieldForLevelBright)
+        view.addSubview(ImgView)
+        view.addSubview(takePhotoOnRight)
+        view.addSubview(takePhotoOnDown)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -45,6 +57,16 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     @IBAction func takePicture(_ sender: Any) {
         takePhoto = true
+    }
+    
+    @IBAction func takePhotoOnRightBtn(_ sender: Any) {
+        ImgView.frame.origin.x -= self.view.frame.size.width / 3 * 2
+        ImgView.isHidden = false
+    }
+    
+    @IBAction func TakePhotoOnDownBtn(_ sender: Any) {
+        ImgView.frame.origin.y -= self.view.frame.size.height / 3 * 2
+        ImgView.isHidden = false
     }
     
     // MARK: - Private Properties
@@ -99,6 +121,9 @@ class ViewController: UIViewController {
         if takePhoto {
             takePhoto = false
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            DispatchQueue.main.async {
+                self.ImgView.image = image
+            }
         }
     }
     
@@ -116,6 +141,30 @@ class ViewController: UIViewController {
         }
         return nil
     }
+    
+    private func getCGImageFromSampleBuffer(buffer: CMSampleBuffer) -> CGImage? {
+        
+        if let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) {
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+            let context = CIContext(options: nil)
+                if context != nil {
+                    return context.createCGImage(ciImage, from: ciImage.extent)
+                }
+        }
+        return nil
+    }
+    
+    private func getCGlmage(from image: UIImage) -> CGImage? {
+        if let ciImage = CIImage(image: image){
+            let context = CIContext(options: nil)
+            if context != nil {
+                return context.createCGImage(ciImage, from: ciImage.extent)
+            }
+        }
+        return nil
+    }
+    
 }
 
 // MARK: - AVFoundation Delegate
@@ -126,14 +175,29 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let image = self.getImageFromSampleBuffer(buffer: sampleBuffer)
         if let image = image {
+            let result = (image.brightness > self.levelBright ? "" : "🔆")
             DispatchQueue.main.async {
-                self.labelForBright.text = (image.brightness > self.levelBright ? "" : "🔆")
+                self.labelForBright.text = result
             }
             savePhoto(image: image)
-            print(image.brightness)
+            //print(image.brightness)
         }
+
+//        let cgImage = self.getCGImageFromSampleBuffer(buffer: sampleBuffer)
+//        if let cgImage = cgImage {
+//            blurVC.getblur(image: cgImage)
+//        }
+        
+        // detect blur test
+//        guard let image = testImage else { return }
+//        let cgImage = self.getCGlmage(from image: image)
+//        if let cgImage = cgImage {
+//        blurVC.getVarianceOf(image: cgImage)
+//        }
+        
     }
 }
+
 
 // MARK: - UITextFieldDelegate
 
@@ -175,3 +239,5 @@ extension ViewController: UITextFieldDelegate {
         }
     }
 }
+
+

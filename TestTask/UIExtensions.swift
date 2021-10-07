@@ -15,10 +15,10 @@ extension CGImage {
         var result: Double = 0
         for _ in 0..<self.height {
             for _ in 0..<self.width {
-                let r = ptr![0]
-                let g = ptr![1]
-                let b = ptr![2]
-                result += (0.299 * Double(r) + 0.587 * Double(g) + 0.114 * Double(b))
+                let red = ptr![0]
+                let green = ptr![1]
+                let blue = ptr![2]
+                result += (0.299 * Double(red) + 0.587 * Double(green) + 0.114 * Double(blue))
                 x += 1
             }
         }
